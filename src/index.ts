@@ -36,6 +36,7 @@ CodeMirror.modeInfo.push({
   mode: 'ihaskell',
   name: 'ihaskell'
 });
+
 /**
  * Initialization data for the ihaskell_labextension extension.
  */
