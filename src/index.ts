@@ -2,50 +2,54 @@ import {
   JupyterLab, JupyterLabPlugin
 } from '@jupyterlab/application';
 
-import '../style/index.css';
-
 import CodeMirror from 'codemirror';
 
-import 'codemirror/mode/meta';
+import {
+  Mode
+} from '@jupyterlab/codemirror';
 
-import 'codemirror/mode/haskell/haskell';
+import '../style/index.css';
 
-
-/**
- * Define an IPython codemirror mode.
- *
- * It is a slightly altered Python Mode with a `?` operator.
- */
-CodeMirror.defineMode('ihaskell', (config: CodeMirror.EditorConfiguration, modeOptions?: any) => {
-    let haskellConf: any = {};
-    for (let prop in modeOptions) {
-      if (modeOptions.hasOwnProperty(prop)) {
-        haskellConf[prop] = modeOptions[prop];
-      }
-    }
-    haskellConf.name = 'haskell';
-    haskellConf.singleOperators = new RegExp('^[\\+\\-\\*/%&|@\\^~<>!\\?]');
-    haskellConf.identifiers = new RegExp('^[_A-Za-z\u00A1-\uFFFF][_A-Za-z0-9\u00A1-\uFFFF]*');
-    return CodeMirror.getMode(config, haskellConf);
-}, 'haskell');
-
-CodeMirror.defineMIME('text/x-ipython', 'ipython');
-CodeMirror.modeInfo.push({
-  ext: [],
-  mime: 'text/x-ihaskell',
-  mode: 'ihaskell',
-  name: 'ihaskell'
-});
 
 /**
- * Initialization data for the ihaskell_labextension extension.
+ * Initialization data for the extension1 extension.
  */
 const extension: JupyterLabPlugin<void> = {
-  id: 'ihaskell_labextension',
+  id: '2_commands_and_menus',
   autoStart: true,
-  activate: (app: JupyterLab) => {
-    console.log('JupyterLab extension ihaskell_labextension is activated!');
+  requires: [],
+  activate: (app: JupyterLab) =>
+  {
+    app.serviceManager.ready
+      .then(() => {defineIHaskell()});
   }
 };
+
+function defineIHaskell() {
+  Mode.defineMode('ihaskell', (config: CodeMirror.EditorConfiguration, modeOptions?: any) => {
+    CodeMirror.defineMode("ihaskell", (config) => {
+      return CodeMirror.multiplexingMode(
+        CodeMirror.getMode(config, "haskell"),
+        {
+          open: /:(?=!)/, // Matches : followed by !, but doesn't consume !
+          close: /^(?!!)/, // Matches start of line not followed by !, doesn't consume character
+          mode: CodeMirror.getMode(config, "text/plain"),
+          delimStyle: "delimit"
+        }
+      );}
+  }, 'Haskell');
+
+  Mode.defineMIME('text/x-ihaskell', 'ihaskell');
+  Mode.getModeInfo().push({
+    ext: [],
+    mime: 'text/x-ihaskell',
+    mode: 'ihaskell',
+    name: 'ihaskell'
+  });
+
+  console.log('CodeMirror.listModes=>');
+  console.log(Mode.getModeInfo());
+}
+
 
 export default extension;
