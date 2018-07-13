@@ -1,16 +1,15 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "lib": ["es2015", "dom"],
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "noImplicitAny": false,
     "noEmitOnError": true,
     "noUnusedLocals": true,
     "allowSyntheticDefaultImports": true,
-    "outDir": "./lib",
+    "module": "commonjs",
+    "moduleResolution": "node",
     "target": "es2015",
-    "strict": true,
-    "strictNullChecks": false,
+    "outDir": "./lib",
+    "lib": ["dom", "es2015"],
     "types": []
   },
   "include": ["src/*"]
