@@ -2,7 +2,7 @@ import {
   JupyterLab, JupyterLabPlugin
 } from '@jupyterlab/application';
 
-import './codemirror-sos';
+import './codemirror-ihaskell';
 
 import '../style/index.css';
 
