@@ -10,7 +10,7 @@ import '../style/index.css';
  * Initialization data for the extension1 extension.
  */
 const extension: JupyterLabPlugin<void> = {
-  id: '2_commands_and_menus',
+  id: 'ihaskell',
   autoStart: true,
   requires: [],
   activate: (app: JupyterLab) =>
